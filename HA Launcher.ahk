@@ -10,19 +10,19 @@ SetWorkingDir %A_ScriptDir%
 Menu, Tray, NoStandard
 
 ;;;;;;;;;;;;;;;;;
-Version = 1.2.1
+Version = 1.2.2
 ;;;;;;;;;;;;;;;;;
 
 ; Config check
 if !FileExist("config.ini")
 {
-	IniWrite, 0, config.ini, Options, AutoStartHA
+	IniWrite, 0, config.ini, Options, AutoLaunchHA
 	IniWrite, 0, config.ini, Options, RunWithWindows
 	IniWrite, 1, config.ini, Options, DefaultHALocation
 	IniWrite, %A_ScriptDir%\hyperspin attraction, config.ini, Options, HALocation
 }
 
-IniRead, AutoStartHA, config.ini, Options, AutoStartHA
+IniRead, AutoLaunchHA, config.ini, Options, AutoLaunchHA
 IniRead, RunWithWindows, config.ini, Options, RunWithWindows
 IniRead, DefaultHALocation, config.ini, Options, DefaultHALocation
 
@@ -47,7 +47,7 @@ GUI_Height = 240
 
 Gui, Add, GroupBox, w340 h190, Options
 Gui, Add, Picture, icon1 x20 y30, %A_ScriptDir%\HA Launcher.exe
-Gui, Add, CheckBox, vGUI_AutoStartHA x90 y30 h20, Launch HA on startup
+Gui, Add, CheckBox, vGUI_AutoLaunchHA x90 y30 h20, Automatically launch HA
 Gui, Add, CheckBox, vGUI_RunWithWindows h20, Run with Windows
 Gui, Add, CheckBox, vGUI_DefaultHALocation gGUI_DefaultHALocation y+18 h20, Use default HA location
 Gui, Add, Text, x24 y120, HA Location:
@@ -63,7 +63,7 @@ Gui -MinimizeBox ; Disable minimize button
 OnMessage( 0x200, "WM_MOUSEMOVE" ) ; Window dragging
 
 ; Link GUI to config variables
-GuiControl,, GUI_AutoStartHA, %AutoStartHA%
+GuiControl,, GUI_AutoLaunchHA, %AutoLaunchHA%
 GuiControl,, GUI_RunWithWindows, %RunWithWindows%
 GuiControl,, GUI_DefaultHALocation, %DefaultHALocation%
 
@@ -77,7 +77,7 @@ if GUI_DefaultHALocation = 1
 
 
 ; Automatically start HA if enabled
-if AutoStartHA = 1
+if AutoLaunchHA = 1
 	Goto, Start
 return
 
@@ -210,7 +210,7 @@ GuiClose:
 SetWorkingDir %A_ScriptDir%
 Gui, Submit
 
-IniWrite, %GUI_AutoStartHA%, config.ini, Options, AutoStartHA
+IniWrite, %GUI_AutoLaunchHA%, config.ini, Options, AutoLaunchHA
 IniWrite, %GUI_RunWithWindows%, config.ini, Options, RunWithWindows
 IniWrite, %GUI_DefaultHALocation%, config.ini, Options, DefaultHALocation
 IniWrite, %GUI_HALocation%, config.ini, Options, HALocation
