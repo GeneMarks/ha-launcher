@@ -17,13 +17,13 @@ FileRead, HALocation, _HALocation.temp ; Get HA location
 GuiControl,, InstallMessage, Installing DirectX Bundle...
 SetWorkingDir %HALocation%\help_faqs\Technical\DirectX 9
 RunWait, DXSETUP.exe /silent
-GuiControl,, InstallProgress, 33
+GuiControl,, InstallProgress, 25
 
 ; Install Microsoft .NET Framework
 GuiControl,, InstallMessage, Installing Microsoft .NET Framework...
 SetWorkingDir %HALocation%\help_faqs\Technical\Microsoft .NET Framework 4
 RunWait, dotNetFx40_Full_x86_x64.exe /passive /norestart
-GuiControl,, InstallProgress, 66
+GuiControl,, InstallProgress, 50
 
 ; Install Visual C++ Runtimes
 GuiControl,, InstallMessage, Installing Visual C++ Runtimes...
@@ -52,6 +52,12 @@ else
     RunWait, vcredist2013_x86.exe /passive /norestart
     RunWait, vcredist2015_2017_2019_x86.exe /passive /norestart
 }
+GuiControl,, InstallProgress, 75
+
+; Install Bebas Neue Font
+GuiControl,, InstallMessage, Installing Bebas Neue Font...
+BebasUrl = %HALocation%\RocketLauncher\Media\Fonts\BebasNeue.ttf
+DllCall("GDI32.DLL\AddFontResource", str, BebasUrl)
 
 GuiControl,, InstallProgress, 100
 GuiControl,, InstallMessage, Done!
