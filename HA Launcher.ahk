@@ -27,9 +27,7 @@ IniRead, RunWithWindows, config.ini, Options, RunWithWindows
 IniRead, DefaultHALocation, config.ini, Options, DefaultHALocation
 
 if DefaultHALocation = 1 ; Ensure default location is up to date
-{
 	IniWrite, %A_ScriptDir%\hyperspin attraction, config.ini, Options, HALocation
-}
 
 IniRead, HALocation, config.ini, Options, HALocation
 
@@ -173,6 +171,7 @@ The following will be installed on your system:
   - Direct X Bundle
   - Microsoft .NET Framework
   - Visual C++ Runtimes
+  - Bebas Neue Font
 
 Would you like to continue?
 	)
@@ -186,7 +185,7 @@ Would you like to continue?
 		FileAppend, %GUI_HALocation%, %A_Temp%\_HALocation.temp ; Output HA Location to temp for dependencies installation
 		
 		SetWorkingDir %A_Temp%
-		RunWait, HA Dependencies Installer.exe
+		RunWait *RunAs HA Dependencies Installer.exe
 
 		; Clean up new temp files
 		FileDelete, %A_Temp%\HA Dependencies Installer.exe
