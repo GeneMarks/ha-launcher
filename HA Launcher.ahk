@@ -10,7 +10,7 @@ SetWorkingDir %A_ScriptDir%
 Menu, Tray, NoStandard
 
 ;;;;;;;;;;;;;;;;;
-Version = 1.2.2
+Version = 1.3.0
 ;;;;;;;;;;;;;;;;;
 
 ; Config check
