@@ -11,53 +11,36 @@ Gui, Show, y200, Installing Dependencies
 
 
 ; Start installation
-FileRead, HALocation, _HALocation.temp ; Get HA location
+; Clean up old dependencies folder
+FileRemoveDir, %A_Temp%\ha_dependencies, 1
+
+; Extract packages
+FileCreateDir, %A_Temp%\ha_dependencies
+FileInstall, dependencies.zip, %A_Temp%\ha_dependencies\dependencies.zip
+DependLocation := A_Temp "\ha_dependencies"
+DependZip := A_Temp "\ha_dependencies\dependencies.zip"
+unz(DependZip, DependLocation)
+
+SetWorkingDir %A_Temp%\ha_dependencies
 
 ; Install Direct X Bundle
 GuiControl,, InstallMessage, Installing DirectX Bundle...
-SetWorkingDir %HALocation%\help_faqs\Technical\DirectX 9
-RunWait, DXSETUP.exe /silent
+RunWait, directx_Jun2010_redist\DXSETUP.exe /silent
 GuiControl,, InstallProgress, 25
 
 ; Install Microsoft .NET Framework
 GuiControl,, InstallMessage, Installing Microsoft .NET Framework...
-SetWorkingDir %HALocation%\help_faqs\Technical\Microsoft .NET Framework 4
 RunWait, dotNetFx40_Full_x86_x64.exe /passive /norestart
 GuiControl,, InstallProgress, 50
 
 ; Install Visual C++ Runtimes
 GuiControl,, InstallMessage, Installing Visual C++ Runtimes...
-SetWorkingDir %HALocation%\help_faqs\Technical\Visual-C-Runtimes-All-in-One-Aug-2020
-if A_Is64bitOS = 1 ; Check architecture
-{
-    RunWait, vcredist2005_x86.exe /q
-    RunWait, vcredist2005_x64.exe /q
-    RunWait, vcredist2008_x86.exe /qb
-    RunWait, vcredist2008_x64.exe /qb
-    RunWait, vcredist2010_x86.exe /passive /norestart
-    RunWait, vcredist2010_x64.exe /passive /norestart
-    RunWait, vcredist2012_x86.exe /passive /norestart
-    RunWait, vcredist2012_x64.exe /passive /norestart
-    RunWait, vcredist2013_x86.exe /passive /norestart
-    RunWait, vcredist2013_x64.exe /passive /norestart
-    RunWait, vcredist2015_2017_2019_x86.exe /passive /norestart
-    RunWait, vcredist2015_2017_2019_x64.exe /passive /norestart
-}
-else
-{
-    RunWait, vcredist2005_x86.exe /q
-    RunWait, vcredist2008_x86.exe /qb
-    RunWait, vcredist2010_x86.exe /passive /norestart
-    RunWait, vcredist2012_x86.exe /passive /norestart
-    RunWait, vcredist2013_x86.exe /passive /norestart
-    RunWait, vcredist2015_2017_2019_x86.exe /passive /norestart
-}
+RunWait, VisualCppRedist_AIO_x86_x64.exe /y
 GuiControl,, InstallProgress, 75
 
 ; Install Bebas Neue Font
 GuiControl,, InstallMessage, Installing Bebas Neue Font...
-BebasUrl = %HALocation%\RocketLauncher\Media\Fonts\BebasNeue.ttf
-DllCall("GDI32.DLL\AddFontResource", str, BebasUrl)
+DllCall("GDI32.DLL\AddFontResource", str, BebasNeue.ttf)
 
 GuiControl,, InstallProgress, 100
 GuiControl,, InstallMessage, Done!
@@ -71,3 +54,12 @@ ifMsgBox, Yes
     ExitApp
 else
     return
+
+
+;;;; Functions ;;;;
+Unz(sZip, sUnz) ; zip file, folder to unzip to
+{
+    FileCreateDir, %sUnz%
+    psh := ComObjCreate("Shell.Application")
+    psh.Namespace(sUnz).CopyHere(psh.Namespace(sZip).items, 4|16)
+}

@@ -179,17 +179,12 @@ Would you like to continue?
 	{
 		; Clean up old temp files
 		FileDelete, %A_Temp%\HA Dependencies Installer.exe
-		FileDelete, %A_Temp%\_HALocation.temp
 
-		FileInstall, HA Dependencies Installer.exe, %A_Temp%\HA Dependencies Installer.exe ; Extract installation script to temp dir
-		FileAppend, %GUI_HALocation%, %A_Temp%\_HALocation.temp ; Output HA Location to temp for dependencies installation
-		
+		; Extract installation script to temp dir
+		FileInstall, HA Dependencies Installer.exe, %A_Temp%\HA Dependencies Installer.exe
+
 		SetWorkingDir %A_Temp%
 		RunWait *RunAs HA Dependencies Installer.exe
-
-		; Clean up new temp files
-		FileDelete, %A_Temp%\HA Dependencies Installer.exe
-		FileDelete, %A_Temp%\_HALocation.temp
 		
 		enableGUI("true")
 		enableTray("true")
@@ -228,6 +223,10 @@ start "" "%A_ScriptDir%\ha launcher.exe"
 }
 else
 	FileDelete, %A_AppData%\Microsoft\Windows\Start Menu\Programs\Startup\HA Launcher.bat
+
+; Clean any temp installer files
+FileDelete, %A_Temp%\HA Dependencies Installer.exe
+FileRemoveDir, %A_Temp%\ha_dependencies, 1
 return
 
 
