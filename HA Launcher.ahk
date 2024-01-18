@@ -85,8 +85,10 @@ return
 ; Start HA
 Start:
 IniRead, HALocation, config.ini, Options, HALocation
+SetWorkingDir %HALocation%
+
 ; Check if HA exists and is not running
-if !FileExist(HALocation . "\hyperspin attraction.exe")
+if !FileExist("hyperspin attraction.exe")
 {
 	MsgBox, 262160,, HyperSpin Attraction could not be found. Please change the HA folder location in Options.
 	return
@@ -97,7 +99,6 @@ else if processExist("hyperspin attraction.exe")
 	return
 }
 
-SetWorkingDir %HALocation%
 Run, hyperspin attraction.exe
 return
 
