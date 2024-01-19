@@ -1,13 +1,35 @@
 ﻿#SingleInstance, Force
 #NoEnv
+OnExit("cleanup")
 #NoTrayIcon
 SetWorkingDir %A_ScriptDir%
 
-if (A_Args.Length() < 1 || A_Args[1] != "FromLauncher")
+if not A_IsAdmin ; Ensure administrator privileges
 {
-    MsgBox, 262160,, Please use HA Launcher to install dependencies.
-    ExitApp
+	try Run *RunAs "%A_ScriptFullPath%" /restart
+	ExitApp
 }
+
+if processExist("hyperspin attraction.exe") ; Check if HA is running
+{
+	MsgBox, 262160,, Please close HyperSpin Attraction before installing dependencies.
+	ExitApp
+}
+
+MsgBox, 262212, Dependencies Installation,
+(
+The following will be installed on your system:
+
+  - Direct X Bundle
+  - Microsoft .NET Framework
+  - Visual C++ Runtimes
+  - Bebas Neue Font
+
+Would you like to continue?
+)
+ifMsgBox, No
+	ExitApp
+
 
 ; Build progress GUI
 Gui, Add, Text, vInstallMessage w300, Beginning installation...
@@ -65,6 +87,16 @@ else
 
 
 ;;;; Functions ;;;;
+cleanup() {
+    SetWorkingDir %A_ScriptDir%
+    FileRemoveDir, %A_Temp%\ha_dependencies, 1
+}
+
+processExist(exe) {
+	Process, Exist, %exe%
+	return ErrorLevel
+}
+
 Unz(sZip, sUnz) ; zip file, folder to unzip to
 {
     FileCreateDir, %sUnz%

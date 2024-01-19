@@ -10,7 +10,7 @@ SetWorkingDir %A_ScriptDir%
 Menu, Tray, NoStandard
 
 ;;;;;;;;;;;;;;;;;
-Version = 1.3.0
+Version = 1.3.1
 ;;;;;;;;;;;;;;;;;
 
 ; Config check
@@ -145,49 +145,13 @@ enableTray("false") ; Disable menu items
 
 ; Checks
 if !FileExist("dependencies.exe") ; Check for setup files
-{
 	MsgBox, 262160,, The dependencies installer could not be found.
-
-	enableGUI("true")
-	enableTray("true")
-	return
-}
-else if processExist("hyperspin attraction.exe") ; Check if HA is running
-{
-	MsgBox, 262160,, Please close HyperSpin Attraction before installing dependencies.
-
-	enableGUI("true")
-	enableTray("true")
-	return
-}
 else
-{
-	MsgBox, 262212, Dependencies Installation,
-	(
-The following will be installed on your system:
+	try RunWait *RunAs dependencies.exe
 
-  - Direct X Bundle
-  - Microsoft .NET Framework
-  - Visual C++ Runtimes
-  - Bebas Neue Font
-
-Would you like to continue?
-	)
-	ifMsgBox, Yes
-	{
-		try RunWait *RunAs dependencies.exe "FromLauncher"
-		
-		enableGUI("true")
-		enableTray("true")
-		return
-	}
-	else
-	{	
-		enableGUI("true")
-		enableTray("true")
-		return
-	}
-}
+enableGUI("true")
+enableTray("true")
+return
 
 
 ; Save options to config upon GUI close
