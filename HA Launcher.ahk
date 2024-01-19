@@ -10,7 +10,7 @@ SetWorkingDir %A_ScriptDir%
 Menu, Tray, NoStandard
 
 ;;;;;;;;;;;;;;;;;
-Version = 1.3.0
+Version = 1.3.1
 ;;;;;;;;;;;;;;;;;
 
 ; Config check
@@ -143,12 +143,10 @@ SetWorkingDir %A_ScriptDir%
 enableGUI("false") ; Disable GUI items
 enableTray("false") ; Disable menu items
 
-GuiControlGet, GUI_HALocation ; Get currently set location
-
 ; Checks
-if !FileExist(GUI_HALocation . "\help_faqs\Technical\DirectX 9\DXSETUP.exe") || !FileExist(GUI_HALocation . "\help_faqs\Technical\Microsoft .NET Framework 4\dotNetFx40_Full_x86_x64.exe") || !FileExist(GUI_HALocation . "\help_faqs\Technical\Visual-C-Runtimes-All-in-One-Aug-2020\install_all.bat") ; Check for setup files
+if !FileExist(A_ScriptDir . "Dependencies.exe") ; Check for setup files
 {
-	MsgBox, 262160,, The setup files could not be found. Please ensure the HA folder location in Options is correct.
+	MsgBox, 262160,, The dependencies installer could not be found.
 
 	enableGUI("true")
 	enableTray("true")
@@ -177,14 +175,8 @@ Would you like to continue?
 	)
 	ifMsgBox, Yes
 	{
-		; Clean up old temp files
-		FileDelete, %A_Temp%\HA Dependencies Installer.exe
-
-		; Extract installation script to temp dir
-		FileInstall, HA Dependencies Installer.exe, %A_Temp%\HA Dependencies Installer.exe
-
-		SetWorkingDir %A_Temp%
-		try RunWait *RunAs HA Dependencies Installer.exe
+		SetWorkingDir %A_ScriptDir%
+		try RunWait *RunAs Dependencies.exe
 		
 		enableGUI("true")
 		enableTray("true")
@@ -223,10 +215,6 @@ start "" "%A_ScriptDir%\ha launcher.exe"
 }
 else
 	FileDelete, %A_AppData%\Microsoft\Windows\Start Menu\Programs\Startup\HA Launcher.bat
-
-; Clean any temp installer files
-FileDelete, %A_Temp%\HA Dependencies Installer.exe
-FileRemoveDir, %A_Temp%\ha_dependencies, 1
 return
 
 
