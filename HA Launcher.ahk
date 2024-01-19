@@ -144,7 +144,7 @@ enableGUI("false") ; Disable GUI items
 enableTray("false") ; Disable menu items
 
 ; Checks
-if !FileExist(A_ScriptDir . "Dependencies.exe") ; Check for setup files
+if !FileExist("dependencies.exe") ; Check for setup files
 {
 	MsgBox, 262160,, The dependencies installer could not be found.
 
@@ -175,8 +175,7 @@ Would you like to continue?
 	)
 	ifMsgBox, Yes
 	{
-		SetWorkingDir %A_ScriptDir%
-		try RunWait *RunAs Dependencies.exe
+		try RunWait *RunAs dependencies.exe "FromLauncher"
 		
 		enableGUI("true")
 		enableTray("true")

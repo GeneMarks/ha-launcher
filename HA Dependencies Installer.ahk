@@ -3,6 +3,12 @@
 #NoTrayIcon
 SetWorkingDir %A_ScriptDir%
 
+if (A_Args.Length() < 1 || A_Args[1] != "FromLauncher")
+{
+    MsgBox, 262160,, Please use HA Launcher to install dependencies.
+    ExitApp
+}
+
 ; Build progress GUI
 Gui, Add, Text, vInstallMessage w300, Beginning installation...
 Gui, Add, Progress, vInstallProgress w300 h20 cGreen, 5
