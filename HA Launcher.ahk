@@ -184,7 +184,7 @@ Would you like to continue?
 		FileInstall, HA Dependencies Installer.exe, %A_Temp%\HA Dependencies Installer.exe
 
 		SetWorkingDir %A_Temp%
-		RunWait *RunAs HA Dependencies Installer.exe
+		try RunWait *RunAs HA Dependencies Installer.exe
 		
 		enableGUI("true")
 		enableTray("true")
